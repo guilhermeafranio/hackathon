@@ -1,6 +1,9 @@
 using CrossCutting.Dependencies;
-using MassTransit;
-using Prometheus;
+using Data.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,25 +16,17 @@ builder.Services.AddControllers();
 ConfigureRepository.ConfigureDependenciesRepository(builder.Services, builder.Configuration);
 ConfigureService.ConfigureDependenciesService(builder.Services);
 
-var configuration = builder.Configuration;
-var servidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
-var usuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
-var senha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
-
-builder.Services.AddMassTransit(x =>
+// Configuração do Identity
+builder.Services.AddIdentityCore<IdentityUser>(options =>
 {
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host(servidor, "/", h =>
-        {
-            h.Username(usuario);
-            h.Password(senha);
-        });
+    options.User.RequireUniqueEmail = true;
+}).AddRoles<IdentityRole>()
+  .AddEntityFrameworkStores<HackathonContext>()
+  .AddSignInManager()
+  .AddDefaultTokenProviders();
 
-        cfg.ConfigureEndpoints(context);
-    });
-});
-
+// Configuração do JWT
+defineJwtAuthentication(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
@@ -47,5 +42,30 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 app.Run();
+
+void defineJwtAuthentication(IServiceCollection services, IConfiguration configuration)
+{
+    var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
+
+    services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = true;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+}
 
 public partial class Program { }

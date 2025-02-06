@@ -1,16 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using Domain.Models;
+//using Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Data.Context;
 
-public class HackathonContext : DbContext
+public class HackathonContext : IdentityDbContext<IdentityUser>
 {
-    public HackathonContext(DbContextOptions options) : base(options) { }
+    public HackathonContext(DbContextOptions<HackathonContext> options) : base(options) { }
 
-    public DbSet<Regiao> Regiao { get; set; }
-    public DbSet<Estado> Estado { get; set; }
-    public DbSet<FoneDdd> FoneDdd { get; set; }
-    public DbSet<Contato> Contato { get; set; }
+    //public DbSet<Contato> Contato { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) { }
 }
