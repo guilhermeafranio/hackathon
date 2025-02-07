@@ -1,5 +1,6 @@
 using CrossCutting.Dependencies;
 using Data.Context;
+using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +18,7 @@ ConfigureRepository.ConfigureDependenciesRepository(builder.Services, builder.Co
 ConfigureService.ConfigureDependenciesService(builder.Services);
 
 // Configuração do Identity
-builder.Services.AddIdentityCore<IdentityUser>(options =>
+builder.Services.AddIdentityCore<Usuario>(options =>
 {
     options.User.RequireUniqueEmail = true;
 }).AddRoles<IdentityRole>()
