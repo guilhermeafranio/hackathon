@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 //using Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using Domain.Models;
 
 namespace Data.Context;
 
-public class HackathonContext : IdentityDbContext<IdentityUser>
+public class HackathonContext : IdentityDbContext<Usuario>
 {
     public HackathonContext(DbContextOptions<HackathonContext> options) : base(options) { }
 
