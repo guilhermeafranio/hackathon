@@ -1,5 +1,6 @@
-﻿namespace Domain.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Domain.Models;
 
 public class Usuario : IdentityUser
 {
