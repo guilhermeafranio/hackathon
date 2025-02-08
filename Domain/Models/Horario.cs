@@ -10,6 +10,7 @@ public class Horario
 
     [Required(ErrorMessage = "Informe o dia")]
     public DateTime Dia { get; set; }
+
     [Required(ErrorMessage = "Informe a hora")]
     public TimeSpan Hora {  get; set; }
 

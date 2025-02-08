@@ -1,4 +1,3 @@
-using Domain.DTOs.Saida;
 using Domain.Interfaces.Services;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;

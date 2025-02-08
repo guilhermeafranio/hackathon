@@ -12,6 +12,7 @@ public class HackathonContext : IdentityDbContext<Usuario>
 
 
     public DbSet<Horario> Horario { get; set; }
+    public DbSet<Consulta> Consulta { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

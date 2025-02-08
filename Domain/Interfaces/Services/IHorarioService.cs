@@ -8,5 +8,5 @@ public interface IHorarioService
     Task<RespostaPadrao> CriarHorario(Horario horario);
     Task<RespostaPadrao> AtualizarHorario(Horario horario);
     Task<RespostaPadrao> ExcluirHorario(Guid id);
-    Task<RespostaPadrao> ListarHorariosPorMedico(string idMedico);
+    Task<RespostaPadrao> ListarHorariosPorMedico(string crm);
 }

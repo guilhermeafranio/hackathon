@@ -1,6 +1,7 @@
 using Data.Context;
 using Domain.Interfaces.Repositories;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;
@@ -28,12 +29,10 @@ public class HorarioRepository(HackathonContext context) : IHorarioRepository
     {
         try
         {
-            var horarios = await _context.Horario
+            return await _context.Horario
                 .Where(w => w.IdUsuario == idMedico)
                 .AsNoTracking()
                 .ToListAsync();
-
-            return horarios;
         }
         catch (Exception ex)
         {
