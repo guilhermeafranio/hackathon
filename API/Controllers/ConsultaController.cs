@@ -16,7 +16,7 @@ public class ConsultaController(
     private readonly IConsultaService _consultaService = consultaService;
 
     [HttpGet("ListarMedicosPorEspecialidade/{especialidade}")]
-    //[Authorize(Roles = "Paciente")]
+    [Authorize(Roles = "Paciente")]
     public async Task<IActionResult> ListarMedicosPorEspecialidade(int especialidade)
     {
         var listaHorarios = await _consultaService.ListarMedicosPorEspecialidade(especialidade);
@@ -28,7 +28,7 @@ public class ConsultaController(
     }
 
     [HttpGet("ListarHorariosMedico/{crm}")]
-    //[Authorize(Roles = "Paciente")]
+    [Authorize(Roles = "Paciente")]
     public async Task<IActionResult> ListarHorariosMedico(string crm)
     {
         var listaHorarios = await _consultaService.ListarHorariosMedico(crm);
@@ -40,7 +40,7 @@ public class ConsultaController(
     }
 
     [HttpPost("AgendarConsulta")]
-    //[Authorize(Roles = "Paciente")]
+    [Authorize(Roles = "Paciente")]
     public async Task<IActionResult> AgendarConsulta([FromBody] ConsultaDTO consulta)
     {
         if (ModelState.IsValid)
@@ -69,7 +69,7 @@ public class ConsultaController(
     }
 
     [HttpPost("ListarConsultasPorPaciente/{email}")]
-    //[Authorize(Roles = "Paciente")]
+    [Authorize(Roles = "Paciente")]
     public async Task<IActionResult> ListarConsultasPorPaciente(string email)
     {
         if (ModelState.IsValid)
@@ -89,7 +89,7 @@ public class ConsultaController(
 
 
     [HttpPut("CancelarConsultaPaciente/{idConsulta}/{justificativa}")]
-    //[Authorize(Roles = "Paciente")]
+    [Authorize(Roles = "Paciente")]
     public async Task<IActionResult> CancelarConsultaPaciente(Guid idConsulta, string justificativa)
     {
         if (ModelState.IsValid)
@@ -108,7 +108,7 @@ public class ConsultaController(
     }
 
     [HttpPost("ListarConsultasPorMedico/{crm}")]
-    //[Authorize(Roles = "Medico")]
+    [Authorize(Roles = "Medico")]
     public async Task<IActionResult> ListarConsultasPorMedico(string crm)
     {
         if (ModelState.IsValid)
@@ -127,7 +127,7 @@ public class ConsultaController(
     }
 
     [HttpPut("AceitarConsultaMedico/{idConsulta}")]
-    //[Authorize(Roles = "Medico")]
+    [Authorize(Roles = "Medico")]
     public async Task<IActionResult> AceitarConsultaMedico(Guid idConsulta)
     {
         if (ModelState.IsValid)
@@ -146,7 +146,7 @@ public class ConsultaController(
     }
 
     [HttpPut("CancelarConsultaMedico/{idConsulta}")]
-    //[Authorize(Roles = "Medico")]
+    [Authorize(Roles = "Medico")]
     public async Task<IActionResult> CancelarConsultaMedico(Guid idConsulta)
     {
         if (ModelState.IsValid)
