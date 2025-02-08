@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-//using Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +11,7 @@ public class HackathonContext : IdentityDbContext<Usuario>
     public HackathonContext() { } // Construtor sem parâmetros necessário para Migrations
 
 
-    //public DbSet<Contato> Contato { get; set; }
+    public DbSet<Horario> Horario { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

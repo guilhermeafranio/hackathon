@@ -8,12 +8,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-
 ConfigureRepository.ConfigureDependenciesRepository(builder.Services, builder.Configuration);
 ConfigureService.ConfigureDependenciesService(builder.Services);
 
@@ -23,11 +17,14 @@ builder.Services.AddIdentityCore<Usuario>(options =>
     options.User.RequireUniqueEmail = true;
 }).AddRoles<IdentityRole>()
   .AddEntityFrameworkStores<HackathonContext>()
-  .AddSignInManager()
-  .AddDefaultTokenProviders();
+  .AddSignInManager();
 
 // Configuração do JWT
 defineJwtAuthentication(builder.Services, builder.Configuration);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 

@@ -42,7 +42,7 @@ public class AuthController(
 
         await userManager.AddToRoleAsync(usuario, role);
 
-        return Ok(new { message = "User registered successfully", role });
+        return Ok(new { message = "Usuário cadastrado com sucesso!", role });
     }
 
     [HttpPost("login")]
