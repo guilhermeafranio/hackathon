@@ -2,20 +2,20 @@
 
 namespace Domain.DTOs.Saida;
 
-public class AgendaMedicoDTO
+public class HorarioMedicoDTO
 {
     public string CRM { get; set; }
     public string NomeCompleto { get; set; }
     public int Especialidade { get; set; }
-    public double ValorConsulta { get; set; }
+    public string ValorConsulta { get; set; }
     public List<Horario> Horarios { get; set; } = [];
 
-    public static AgendaMedicoDTO ConverterAgendaMedicoDTO(Usuario usuario, List<Horario> horarios)
+    public static HorarioMedicoDTO ConverterHorarioMedicoDTO(Usuario usuario, List<Horario> horarios)
     {
-        return new AgendaMedicoDTO
+        return new HorarioMedicoDTO
         {
             CRM = usuario.CRM,
-            Especialidade = usuario.Especialidade.GetValueOrDefault(),
+            Especialidade = Convert.ToInt32(usuario.Especialidade),
             NomeCompleto = usuario.FullName,
             ValorConsulta = usuario.ValorConsulta,
             Horarios = horarios

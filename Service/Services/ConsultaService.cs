@@ -16,8 +16,9 @@ public class ConsultaService(
     {
         try
         {
-            var novoContato = await _consultaRepository.AgendarConsulta(consulta);
-            return new RespostaPadrao(true, novoContato, "Consulta agendada com sucesso");
+            var novaConsulta = await _consultaRepository.AgendarConsulta(consulta);
+            novaConsulta.Paciente = null;
+            return new RespostaPadrao(true, novaConsulta, "Consulta agendada com sucesso");
         }
         catch (Exception ex)
         {
@@ -82,7 +83,7 @@ public class ConsultaService(
         }
     }
 
-    public async Task<RespostaPadrao> ConsultarAgendaMedico(string crm)
+    public async Task<RespostaPadrao> ListarHorariosMedico(string crm)
     {
         try
         {
@@ -95,7 +96,47 @@ public class ConsultaService(
 
             return new RespostaPadrao(
                 true, 
-                AgendaMedicoDTO.ConverterAgendaMedicoDTO(medico, horarios), 
+                HorarioMedicoDTO.ConverterHorarioMedicoDTO(medico, horarios), 
+                null);
+        }
+        catch (Exception ex)
+        {
+            return new RespostaPadrao(false, null, ex.Message);
+        }
+    }
+
+    public async Task<RespostaPadrao> ListarConsultasPorPaciente(string email)
+    {
+        try
+        {
+            var consultas = await _consultaRepository.ListarConsultasPorPaciente(email);
+
+            foreach (var item in consultas)
+                item.Paciente = null;
+
+            return new RespostaPadrao(
+                true,
+                consultas,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return new RespostaPadrao(false, null, ex.Message);
+        }
+    }
+
+    public async Task<RespostaPadrao> ListarConsultasPorMedico(string crm)
+    {
+        try
+        {
+            var consultas = await _consultaRepository.ListarConsultasPorMedico(crm);
+
+            foreach (var consulta in consultas)
+                consulta.Horario.Medico = null;
+
+            return new RespostaPadrao(
+                true,
+                consultas,
                 null);
         }
         catch (Exception ex)

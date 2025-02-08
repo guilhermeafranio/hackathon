@@ -8,12 +8,15 @@ public class Consulta
     [Key]
     public Guid Id { get; set; }
 
-    [Required(ErrorMessage = "Informe o status da consulta")]
     public int Status { get; set; }
 
     public string? JustificativaCancelamento { get; set; }
 
-    [Required(ErrorMessage = "Informe o horário")]
+    public string IdPaciente { get; set; }
+
+    [ForeignKey("IdPaciente")]
+    public Usuario? Paciente { get; set; }
+
     public Guid IdHorario { get; set; }
     
     [ForeignKey("IdHorario")]

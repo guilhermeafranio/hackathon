@@ -13,7 +13,7 @@ public class MedicoDTO
         return new MedicoDTO
         {
             CRM = usuario.CRM,
-            Especialidade = usuario.Especialidade.GetValueOrDefault(),
+            Especialidade = Convert.ToInt32(usuario.Especialidade),
             NomeCompleto = usuario.FullName
         };
     }

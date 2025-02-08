@@ -1,4 +1,5 @@
 ﻿using Data.Context;
+using Domain.DTOs.Saida;
 using Domain.Enums;
 using Domain.Interfaces.Repositories;
 using Domain.Models;
@@ -74,7 +75,7 @@ public class ConsultaRepository(HackathonContext context) : IConsultaRepository
         try
         {
             return await _context.Users
-                .Where(w => w.Especialidade == especialidade)
+                .Where(w => w.Especialidade == especialidade.ToString())
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -95,5 +96,23 @@ public class ConsultaRepository(HackathonContext context) : IConsultaRepository
         {
             throw new Exception("Erro ao consultar o médico", ex);
         }
+    }
+
+    public async Task<List<Consulta>> ListarConsultasPorPaciente(string email)
+    {
+        return await _context.Consulta
+            .Include(x => x.Horario)
+            .Include(x => x.Paciente)
+            .Where(x => x.Paciente.Email == email)
+            .ToListAsync();
+    }
+
+    public async Task<List<Consulta>> ListarConsultasPorMedico(string crm)
+    {
+        return await _context.Consulta
+            .Include(x => x.Horario)
+            .ThenInclude(x => x.Medico)
+            .Where(x => x.Horario.Medico.CRM == crm)
+            .ToListAsync();
     }
 }

@@ -1,3 +1,4 @@
+using Domain.DTOs.Entrada;
 using Domain.DTOs.Saida;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
@@ -10,11 +11,19 @@ public class HorarioService(
 {
     private readonly IHorarioRepository _horarioRepository = horarioRepository;
 
-    public async Task<RespostaPadrao> CriarHorario(Horario horario)
+    public async Task<RespostaPadrao> CriarHorario(HorarioDTO horario)
     {
         try
         {
-            var novoHorario = await _horarioRepository.CriarHorario(horario);
+            var model = new Horario
+            {
+                Id = Guid.NewGuid(),
+                Dia = horario.Dia,
+                Hora = horario.Hora,
+                IdUsuario = horario.IdUsuario
+            };
+
+            var novoHorario = await _horarioRepository.CriarHorario(model);
             return new RespostaPadrao(true, novoHorario, "Horário criado com sucesso");
         }
         catch (Exception ex)
@@ -23,11 +32,19 @@ public class HorarioService(
         }
     }
 
-    public async Task<RespostaPadrao> AtualizarHorario(Horario horario)
+    public async Task<RespostaPadrao> AtualizarHorario(HorarioDTO horario)
     {
         try
         {
-            var horarioAtualizado = await _horarioRepository.AtualizarHorario(horario);
+            var model = new Horario
+            {
+                Id = horario.Id,
+                Dia = horario.Dia,
+                Hora = horario.Hora,
+                IdUsuario = horario.IdUsuario
+            };
+
+            var horarioAtualizado = await _horarioRepository.AtualizarHorario(model);
             if (horarioAtualizado.Id == Guid.Empty)
                 return new RespostaPadrao(true, null, "Horário não encontrado");
             

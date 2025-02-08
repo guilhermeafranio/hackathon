@@ -10,5 +10,7 @@ public interface IConsultaService
     Task<RespostaPadrao> AceitarConsultaMedico(Guid idConsulta);
     Task<RespostaPadrao> CancelarConsultaMedico(Guid idConsulta);
     Task<RespostaPadrao> ListarMedicosPorEspecialidade(int especialidade);
-    Task<RespostaPadrao> ConsultarAgendaMedico(string crm);
+    Task<RespostaPadrao> ListarHorariosMedico(string crm);
+    Task<RespostaPadrao> ListarConsultasPorPaciente(string email);
+    Task<RespostaPadrao> ListarConsultasPorMedico(string crm);
 }

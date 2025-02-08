@@ -19,7 +19,11 @@ public class AuthController(
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDTO model)
     {
-        var usuario = new Usuario { FullName = model.FullName, CRM = model.CRM };
+        var usuario = new Usuario { 
+            FullName = model.FullName, CRM = model.CRM,
+            Email = model.Email,
+            Especialidade = model.Especialidade, ValorConsulta = model.ValorConsulta 
+        };
 
         string role;
         if (!string.IsNullOrEmpty(model.CRM))
@@ -30,7 +34,6 @@ public class AuthController(
         else
         {
             usuario.UserName = model.Email;
-            usuario.Email = model.Email;
             role = "Paciente";
         }
 
@@ -72,7 +75,9 @@ public class AuthController(
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim("FullName", user.FullName),
-            new Claim("CRM", user.CRM ?? string.Empty),
+            new Claim("CRM", user.CRM),
+            new Claim("Especialidade", user.Especialidade),
+            new Claim("ValorConsulta", user.ValorConsulta),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

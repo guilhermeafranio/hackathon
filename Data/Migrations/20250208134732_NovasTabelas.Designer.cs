@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(HackathonContext))]
-    partial class HackathonContextModelSnapshot : ModelSnapshot
+    [Migration("20250208134732_NovasTabelas")]
+    partial class NovasTabelas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,10 +34,6 @@ namespace Data.Migrations
                     b.Property<Guid>("IdHorario")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("IdPaciente")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("JustificativaCancelamento")
                         .HasColumnType("text");
 
@@ -44,8 +43,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IdHorario");
-
-                    b.HasIndex("IdPaciente");
 
                     b.ToTable("Consulta");
                 });
@@ -289,15 +286,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.Usuario", "Paciente")
-                        .WithMany()
-                        .HasForeignKey("IdPaciente")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Horario");
-
-                    b.Navigation("Paciente");
                 });
 
             modelBuilder.Entity("Domain.Models.Horario", b =>

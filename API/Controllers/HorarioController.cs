@@ -1,19 +1,20 @@
+using Domain.DTOs.Entrada;
 using Domain.Interfaces.Services;
-using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("api/[controller]")]
-public class HoararioController(IHorarioService contatoService) : Controller
+[Authorize(Roles = "Medico")]
+public class HorarioController(IHorarioService horarioService) : ControllerBase
 {
-    private readonly IHorarioService _horarioService = contatoService;
-
+    private readonly IHorarioService _horarioService = horarioService;
+    
     [HttpPost]
-    public async Task<IActionResult> CriarHoario([FromBody] Horario horario)
+    [Route("CriarHorario")]
+    public async Task<IActionResult> CriarHorario([FromBody] HorarioDTO horario)
     {
         if (ModelState.IsValid)
         {
@@ -31,7 +32,8 @@ public class HoararioController(IHorarioService contatoService) : Controller
     }
 
     [HttpPut]
-    public async Task<IActionResult> AtualizarContato([FromBody] Horario horario)
+    [Route("AtualizarHorario")]
+    public async Task<IActionResult> AtualizarHorario([FromBody] HorarioDTO horario)
     {
         if (ModelState.IsValid)
         {
@@ -48,7 +50,7 @@ public class HoararioController(IHorarioService contatoService) : Controller
         return BadRequest(500);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("ExcluirHorario/{id}")]
     public async Task<IActionResult> ExcluirHorario(Guid id)
     {
         try
@@ -61,7 +63,7 @@ public class HoararioController(IHorarioService contatoService) : Controller
         }
     }
 
-    [HttpGet("idMedico/{idMedico}")]
+    [HttpGet("ListarHorariosPorMedico/{idMedico}")]
     public async Task<IActionResult> ListarHorariosPorMedico(string idMedico)
     {
         var listaHorarios = await _horarioService.ListarHorariosPorMedico(idMedico);
