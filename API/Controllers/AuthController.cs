@@ -19,10 +19,13 @@ public class AuthController(
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDTO model)
     {
-        var usuario = new Usuario { 
-            FullName = model.FullName, CRM = model.CRM,
+        var usuario = new Usuario
+        {
+            FullName = model.FullName,
+            CRM = model.CRM,
             Email = model.Email,
-            Especialidade = model.Especialidade, ValorConsulta = model.ValorConsulta 
+            Especialidade = model.Especialidade,
+            ValorConsulta = model.ValorConsulta
         };
 
         string role;
@@ -45,7 +48,7 @@ public class AuthController(
 
         await userManager.AddToRoleAsync(usuario, role);
 
-        return Ok(new { message = "Usuário cadastrado com sucesso!", role });
+        return Ok(new { message = "Usuário cadastrado com sucesso!", role, id = usuario.Id });
     }
 
     [HttpPost("login")]
@@ -61,7 +64,7 @@ public class AuthController(
             return Unauthorized("Credenciais inválidas!");
 
         var token = await GenerateJwtToken(usuario);
-        return Ok(new { token });
+        return Ok(new { id = usuario.Id, token });
     }
 
     private async Task<string> GenerateJwtToken(Usuario user)
@@ -74,10 +77,10 @@ public class AuthController(
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim("FullName", user.FullName),
-            new Claim("CRM", user.CRM),
-            new Claim("Especialidade", user.Especialidade),
-            new Claim("ValorConsulta", user.ValorConsulta),
+            new Claim("FullName", user.FullName != null ? user.FullName : ""),
+            new Claim("CRM", user.CRM != null ? user.CRM : ""),
+            new Claim("Especialidade", user.Especialidade != null ? user.Especialidade : ""),
+            new Claim("ValorConsulta", user.ValorConsulta != null ? user.ValorConsulta : ""),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

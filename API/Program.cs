@@ -4,6 +4,7 @@ using Domain.DTOs.Converters;
 using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -18,7 +19,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
     options.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
 });
 
-// Configuração do Identity
+// Configuraï¿½ï¿½o do Identity
 builder.Services.AddIdentityCore<Usuario>(options =>
 {
     options.User.RequireUniqueEmail = true;
@@ -26,7 +27,7 @@ builder.Services.AddIdentityCore<Usuario>(options =>
   .AddEntityFrameworkStores<HackathonContext>()
   .AddSignInManager();
 
-// Configuração do JWT
+// Configuraï¿½ï¿½o do JWT
 defineJwtAuthentication(builder.Services, builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -35,7 +36,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Hackathon", Version = "v1" });
 
-    // Configuração para adicionar suporte ao Bearer Token
+    // Configuraï¿½ï¿½o para adicionar suporte ao Bearer Token
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -71,6 +72,23 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var db = services.GetRequiredService<HackathonContext>();
+        db.Database.Migrate();
+        Console.WriteLine("MigraÃ§Ãµes executadas");
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Erro ao realizar migraÃ§Ã£o automÃ¡tica: {e.Message}, Detalhes: {e.InnerException?.Message}");
+        throw new Exception(
+            $"Erro ao realizar migraÃ§Ã£o: {e.Message}");
+    }
 }
 
 app.MapControllers();

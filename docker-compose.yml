@@ -1,24 +1,33 @@
-version: '3.4'
-
 services:
-  application:
-    image: ${DOCKER_REGISTRY-}application
-    container_name: hackathon.api
+  hackathon-api:
+    image: ${DOCKER_REGISTRY-}api
+    container_name: hackathon-api
     build:
       context: .
       dockerfile: Api/Dockerfile
     ports:
-        - "5000:5000"
-        - "5001:5001"
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - hackathon-database
+    networks:
+      - hackathon-network
 
-  techchallenge.database:
+  hackathon-database:
     image: postgres:latest
-    container_name: hackathon.database
-    environment: 
-        - POSTGRES_DB=postgres
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
+    container_name: hackathon-database
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
-        - ./.containers/hackathon-db:/var/lib/postegresql/data
+      - ./.containers/hackathon-db:/var/lib/postegresql/data
     ports:
-        - "5432:5432"
+      - "5432:5432"
+    networks:
+      - hackathon-network
+
+networks:
+  hackathon-network:
+    # Specify driver options
+    driver: bridge

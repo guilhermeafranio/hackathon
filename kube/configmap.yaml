@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+data:
+  # ConnectionStrings
+  ConnectionStrings__Hackathon: "Server=database-service.default.svc.cluster.local;Port=5432;Database=postgres;User ID=postgres;Password=postgres;Trust Server Certificate=True"
